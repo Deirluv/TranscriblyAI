@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+<th:block th:replace="~{layout :: content}">
+    <h2>Welcome, <span th:text="${#authentication.name}"></span>!</h2>
+
+    <a href="/transcribe" class="btn btn-primary">Create new transcription</a>
+
+    <p>Your transcriptions:</p>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Text</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="transcription : ${transcriptions}">
+            <td th:text="${transcription.text}"></td>
+            <td th:text="${transcription.isPublic ? 'Public' : 'Private'}"></td>
+            <td>
+                <form method="post" th:action="@{/transcription/{id}/toggle(id=${transcription.id})}">
+                    <button type="submit" class="btn btn-sm btn-secondary">
+                        Make <span th:text="${transcription.isPublic ? 'private' : 'public'}"></span>
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</th:block>
+</body>
+</html>

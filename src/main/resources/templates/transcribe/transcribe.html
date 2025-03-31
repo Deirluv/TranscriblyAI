@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Transcription</title>
+</head>
+<body>
+<th:block th:replace="~{layout :: content}">
+    <h2>Upload Audio File</h2>
+    <form method="post" action="/transcribe" enctype="multipart/form-data">
+        <div class="mb-3">
+            <input type="file" class="form-control" name="audioFile" required>
+        </div>
+        <button type="submit" class="btn btn-success">Upload</button>
+    </form>
+</th:block>
+</body>
+</html>
