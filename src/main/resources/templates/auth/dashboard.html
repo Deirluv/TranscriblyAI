@@ -2,19 +2,19 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Dashboard</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body>
-<th:block th:replace="~{layout :: content}">
+<div class="container mt-4">
     <h2>Welcome, <span th:text="${#authentication.name}"></span>!</h2>
-
     <a href="/transcribe" class="btn btn-primary">Create new transcription</a>
-
     <p>Your transcriptions:</p>
-
     <table class="table">
         <thead>
         <tr>
             <th>Text</th>
+            <th>Audio</th>
             <th>Status</th>
             <th>Action</th>
         </tr>
@@ -22,6 +22,12 @@
         <tbody>
         <tr th:each="transcription : ${transcriptions}">
             <td th:text="${transcription.text}"></td>
+            <td>
+                <audio controls>
+                    <source th:src="@{${'/storage/public/' + transcription.filename}}" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </td>
             <td th:text="${transcription.isPublic ? 'Public' : 'Private'}"></td>
             <td>
                 <form method="post" th:action="@{/transcription/{id}/toggle(id=${transcription.id})}">
@@ -29,10 +35,48 @@
                         Make <span th:text="${transcription.isPublic ? 'private' : 'public'}"></span>
                     </button>
                 </form>
+                <!-- Кнопка для открытия модального окна удаления -->
+                <button type="button" class="btn btn-sm btn-danger mt-2" data-bs-toggle="modal" data-bs-target="#deleteModal" th:data-transcription-id="${transcription.id}">
+                    Delete
+                </button>
             </td>
         </tr>
         </tbody>
     </table>
-</th:block>
+</div>
+
+<!-- Модальное окно подтверждения удаления -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this transcription? This action cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form method="post" th:action="@{/transcription/{id}/delete(id=${transcription.id})}" id="deleteForm">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Заполняем форму удаления соответствующим ID транскрипции
+    var deleteModal = document.getElementById('deleteModal');
+    deleteModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget; // Кнопка, которая открыла модальное окно
+        var transcriptionId = button.getAttribute('data-bs-transcription-id'); // Получаем ID транскрипции
+        var form = deleteModal.querySelector('form');
+        var actionUrl = form.getAttribute('th:action').replace('{id}', transcriptionId);
+        form.setAttribute('action', actionUrl);
+    });
+</script>
 </body>
 </html>

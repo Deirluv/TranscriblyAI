@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Public Transcriptions</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h2>Public Transcriptions</h2>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Text</th>
+            <th>Audio</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="transcription : ${transcriptions.content}">
+            <td th:text="${transcription.text}"></td>
+            <td>
+                <audio controls>
+                    <source th:src="@{/storage/public/{filename}(filename=${transcription.filename})}" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div>
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'" >
+                <a class="page-link" href="#" th:href="@{/public-transcriptions(page=0)}">First</a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                <a class="page-link" href="#" th:href="@{/public-transcriptions(page=${currentPage - 1})}">Previous</a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                <a class="page-link" href="#" th:href="@{/public-transcriptions(page=${currentPage + 1})}">Next</a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                <a class="page-link" href="#" th:href="@{/public-transcriptions(page=${totalPages - 1})}">Last</a>
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
