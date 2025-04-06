@@ -10,6 +10,8 @@
 <div class="container mt-5">
     <h2>Upload Audio File</h2>
     <form method="post" action="/transcribe" enctype="multipart/form-data">
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+
         <div class="mb-3">
             <input type="file" class="form-control" name="audioFile" accept=".mp3" required>
         </div>

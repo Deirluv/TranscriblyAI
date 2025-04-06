@@ -24,9 +24,10 @@
             <td th:text="${transcription.text}"></td>
             <td>
                 <audio controls>
-                    <source th:src="@{${'/storage/public/' + transcription.filename}}" type="audio/mpeg">
+                    <source th:src="@{/storage/public/{filename}(filename=${transcription.filename})}" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
+
             </td>
             <td th:text="${transcription.isPublic ? 'Public' : 'Private'}"></td>
             <td>

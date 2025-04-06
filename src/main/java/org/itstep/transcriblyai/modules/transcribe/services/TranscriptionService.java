@@ -17,12 +17,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TranscriptionService {
     private final TranscriptionRepository transcriptionRepository;
+    private final SpeechToTextService speechToTextService;
+
 
     public StringBuilder generateTranscription(MultipartFile file) throws IOException {
         ByteString audioBytes = ByteString.readFrom(file.getInputStream());
-        try (SpeechClient speechClient = SpeechClient.create()) {
+        try (SpeechClient speechClient = speechToTextService.createSpeechClient()) {
             RecognitionConfig config = RecognitionConfig.newBuilder()
-                    .setEncoding(RecognitionConfig.AudioEncoding.LINEAR16)
+                    .setEncoding(RecognitionConfig.AudioEncoding.MP3)
                     .setSampleRateHertz(16000)
                     .setLanguageCode("en-US")
                     .build();

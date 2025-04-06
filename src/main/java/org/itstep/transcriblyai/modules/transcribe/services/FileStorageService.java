@@ -10,6 +10,7 @@ import java.nio.file.Files;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.UUID;
 
 @Service
 public class FileStorageService {
@@ -25,14 +26,22 @@ public class FileStorageService {
 
     public String storeFile(MultipartFile file) throws IOException {
 
-        String filename = StringUtils.cleanPath(file.getOriginalFilename());
+        String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
+        String extension = "";
 
-        Path targetLocation = Paths.get(publicStorage, filename);
+        int dotIndex = originalFilename.lastIndexOf('.');
+        if (dotIndex > 0) {
+            extension = originalFilename.substring(dotIndex);
+        }
+
+        String generatedFilename = UUID.randomUUID().toString() + extension;
+
+        Path targetLocation = Paths.get(publicStorage).resolve(generatedFilename);
 
         Files.createDirectories(targetLocation.getParent());
 
         Files.copy(file.getInputStream(), targetLocation);
 
-        return filename;
+        return generatedFilename;
     }
 }
