@@ -7,7 +7,7 @@
 </head>
 <body>
 <div class="container mt-4">
-    <h2>Welcome, <span th:text="${#authentication.name}"></span>!</h2>
+    <h2>Welcome, <span th:text="${user.getUsername()}"></span>!</h2>
     <a href="/transcribe" class="btn btn-primary">Create new transcription</a>
     <p>Your transcriptions:</p>
     <table class="table">
@@ -36,17 +36,19 @@
                         Make <span th:text="${transcription.isPublic ? 'private' : 'public'}"></span>
                     </button>
                 </form>
-                <!-- Кнопка для открытия модального окна удаления -->
-                <button type="button" class="btn btn-sm btn-danger mt-2" data-bs-toggle="modal" data-bs-target="#deleteModal" th:data-transcription-id="${transcription.id}">
-                    Delete
-                </button>
+
+                <form method="post" id="_deleteForm">
+                    <button type="button" class="btn btn-sm btn-danger mt-2" data-bs-toggle="modal" data-bs-target="#deleteModal" th:data-transcription-id="${transcription.id}">
+                        Delete
+                    </button>
+                </form>
             </td>
         </tr>
         </tbody>
     </table>
 </div>
 
-<!-- Модальное окно подтверждения удаления -->
+
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -59,7 +61,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <form method="post" th:action="@{/transcription/{id}/delete(id=${transcription.id})}" id="deleteForm">
+                <form method="post" id="deleteForm">
+                    <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
                     <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
             </div>
@@ -69,15 +72,19 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // Заполняем форму удаления соответствующим ID транскрипции
     var deleteModal = document.getElementById('deleteModal');
     deleteModal.addEventListener('show.bs.modal', function (event) {
-        var button = event.relatedTarget; // Кнопка, которая открыла модальное окно
-        var transcriptionId = button.getAttribute('data-bs-transcription-id'); // Получаем ID транскрипции
-        var form = deleteModal.querySelector('form');
-        var actionUrl = form.getAttribute('th:action').replace('{id}', transcriptionId);
-        form.setAttribute('action', actionUrl);
+        var button = event.relatedTarget;
+        var transcriptionId = button.getAttribute('data-transcription-id');
+
+        if (!transcriptionId) {
+            console.error("Transcription ID is missing!");
+        }
+
+        var form = deleteModal.querySelector('#deleteForm');
+        form.action = '/transcription/' + transcriptionId + '/delete';
     });
+
 </script>
 </body>
 </html>

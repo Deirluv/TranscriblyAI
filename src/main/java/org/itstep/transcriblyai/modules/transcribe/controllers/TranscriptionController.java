@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.security.core.Authentication;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -40,6 +41,7 @@ public class TranscriptionController {
             UserModel user = (UserModel) authentication.getPrincipal();
             List<TranscriptionModel> transcriptions = transcriptionService.getUserTranscriptions(user.getId());
             model.addAttribute("transcriptions", transcriptions);
+            model.addAttribute("user", user);
             return "auth/dashboard";
         }
         return "redirect:/login";
@@ -88,5 +90,14 @@ public class TranscriptionController {
         model.addAttribute("totalPages", transcriptionsPage.getTotalPages());
 
         return "transcribe/transcriptions";
+    }
+
+    @PostMapping("/transcription/{id}/delete")
+    public String deleteTranscription(@PathVariable Long id, Principal principal) {
+        TranscriptionModel transcription = transcriptionService.findById(id);
+        if(transcription.getUser().getUsername().equals(principal.getName())) {
+            transcriptionService.deleteTranscription(id);
+        }
+        return "redirect:/dashboard";
     }
 }

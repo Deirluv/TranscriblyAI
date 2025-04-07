@@ -70,4 +70,10 @@ public class TranscriptionService {
                 .orElseThrow(() -> new RuntimeException("Transcription not found"));
         transcriptionRepository.delete(transcription);
     }
+
+    public TranscriptionModel findById(Long id) {
+        TranscriptionModel transcription = transcriptionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Transcription not found"));
+        return transcription;
+    }
 }

@@ -31,16 +31,16 @@
     <div>
         <ul class="pagination">
             <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'" >
-                <a class="page-link" href="#" th:href="@{/public-transcriptions(page=0)}">First</a>
+                <a class="page-link" href="#" th:href="@{/transcriptions(page=0)}">First</a>
             </li>
             <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                <a class="page-link" href="#" th:href="@{/public-transcriptions(page=${currentPage - 1})}">Previous</a>
+                <a class="page-link" href="#" th:href="@{/transcriptions(page=${currentPage - 1})}">Previous</a>
             </li>
             <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                <a class="page-link" href="#" th:href="@{/public-transcriptions(page=${currentPage + 1})}">Next</a>
+                <a class="page-link" href="#" th:href="@{/transcriptions(page=${currentPage + 1})}">Next</a>
             </li>
             <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                <a class="page-link" href="#" th:href="@{/public-transcriptions(page=${totalPages - 1})}">Last</a>
+                <a class="page-link" href="#" th:href="@{/transcriptions(page=${totalPages - 1})}">Last</a>
             </li>
         </ul>
     </div>
