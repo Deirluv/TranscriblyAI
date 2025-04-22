@@ -63,7 +63,8 @@ google.api.key=YOUR_GOOGLE_API_KEY
 
 #### 2. Run the application
 
-```./mvnw spring-boot:run
+```
+./mvnw spring-boot:run
 ```
 
 ## 📂 Project Structure
