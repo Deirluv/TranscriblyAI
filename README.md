@@ -80,25 +80,25 @@ google.api.key=YOUR_GOOGLE_API_KEY
 
 ## ✅ Example Use Case
 
-1. 👤 **Register or Login**  
+1.  👤 **Register or Login**  
    The user accesses the system by registering or logging in.
 
-2. 🎧 **Upload Audio File**  
+2.  🎧 **Upload Audio File**  
    Using the form, the user selects and uploads a `.mp3` audio file.
 
-3. 📤 **Chunked Upload**  
+3.  📤 **Chunked Upload**  
    The file is automatically split into chunks and uploaded sequentially to the server.
 
-4. 🔄 **File Assembly & Storage**  
+4.  🔄 **File Assembly & Storage**  
    Once all chunks are received, the server assembles the full file and stores it in the `storage/public` directory.
 
-5. 🧠 **Transcription**  
+5.  🧠 **Transcription**  
    The file is sent to the Google Cloud Speech-to-Text API for transcription.
 
-6. 💾 **Save to Database**  
+6.  💾 **Save to Database**  
    The transcribed text is saved in the database and linked to the current user.
 
-7. 🧑‍💻 **View & Manage**  
+7.  🧑‍💻 **View & Manage**  
    The user can view, make private/public, or delete their transcriptions from the dashboard.
 
 
